@@ -14,6 +14,8 @@ If the focus is on an accordion tab:
 - `HOME` moves focus to first accordion tab.
 - `END` moves focus to last accordion tab.
 
+{% include components/accordion/accordion.html %}
+
 Here's the HTML:
 {% highlight html %}
 {% include components/accordion/accordion.html %}

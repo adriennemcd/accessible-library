@@ -3,9 +3,17 @@ layout: post
 title:  "Accordion"
 date:   2017-11-28 09:29:03 -0500
 categories: component
+scss: sass/components/accordion.scss
 jsarr:
      - components/accordion/accordion.js
 ---
+
+Component
+----
+{% include components/accordion/accordion.html %}
+
+Functionality
+----
 If the focus is on an accordion tab:
 - `Click`, `enter`, or `spacebar` open and close the related accordion panel.
 - `Left` or `Up` arrows move focus to previous accordion tab.  If focus is on the first accordion tab, moves focus to the last accordion header.
@@ -14,16 +22,9 @@ If the focus is on an accordion tab:
 - `HOME` moves focus to first accordion tab.
 - `END` moves focus to last accordion tab.
 
-{% include components/accordion/accordion.html %}
+Source code
+----
+{% include components/accordion/accordion_accordion.html %}
 
-Here's the HTML:
-{% highlight html %}
-{% include components/accordion/accordion.html %}
-{% endhighlight %}
-
-And here's the JS:
-{% highlight javascript %}
-{% include components/accordion/accordion.js %}
-{% endhighlight %}
 
 

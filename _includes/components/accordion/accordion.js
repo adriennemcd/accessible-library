@@ -130,11 +130,19 @@ var accordion = (function(){
     setAriaVisible: function($clickedTab, $clickedPanel) {
       $clickedTab.setAttribute('aria-expanded', 'true');
       $clickedPanel.setAttribute('aria-hidden', 'false');
+      var links = $clickedPanel.querySelectorAll("a");
+      links.forEach(function(link){
+        link.setAttribute('tabindex', '0');
+      });
     },
 
     setAriaHidden: function($clickedTab, $clickedPanel) {
       $clickedTab.setAttribute('aria-expanded', 'false');
       $clickedPanel.setAttribute('aria-hidden', 'true');
+      var links = $clickedPanel.querySelectorAll("a");
+      links.forEach(function(link){
+        link.setAttribute('tabindex', '-1');
+      });
     },
 
     bindAria: function($accordion) {

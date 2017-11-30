@@ -1,6 +1,7 @@
 .accordion
 {
   $block: &;
+  border: 1px solid $silver;
 
   &__tab {
     display: block;
@@ -28,7 +29,7 @@
     height: 0px;
     max-height: 0px; 
     margin: 0;
-    background: $silver-xlt;
+    background: $white;
     overflow: hidden;
     transition: all 400ms cubic-bezier(0.58, 0.01, 0.66, 1);
 

@@ -1,0 +1,41 @@
+.form {
+    &__radiogroup {
+        // position: relative;
+        // width: auto;
+        
+        
+        .form__input {
+            width: auto;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .form__label {
+            margin-bottom: 5px;
+            cursor: pointer;
+            line-height: 20px;
+
+            &:before {
+                content: " ";
+                display: inline-block;
+                vertical-align: middle;
+                position: relative; 
+                top: -1px;
+                width: 20px;
+                height: 20px;
+                border-radius: 100%;
+                margin: -1px 8px 0 0;
+                box-shadow: inset 0px 0px 6px rgba(0,0,0,0.2);
+                transition: all .22s ease;
+                -webkit-transition: all .22s ease;
+            }
+        }
+
+        input:checked + label:before,
+        input:focus + label:before {
+            background-color: $radio-checked;
+            box-shadow: none;
+        }
+    }
+}

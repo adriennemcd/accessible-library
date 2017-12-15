@@ -161,7 +161,7 @@ var accordion = (function(){
           $panels = $accordion.getElementsByClassName(_.settings.$panel);
 
       $accordion.setAttribute('role', 'presentation');
-      
+
       for(var j=0; j < $headings.length; j++){
         setAttributes($headings[j], {
           'role': 'heading',
@@ -184,6 +184,11 @@ var accordion = (function(){
           'role': 'region',
           'aria-hidden': 'true',
           'aria-labelledby': 'a' + i + '_tab' + j
+        });
+
+        $links = $panels[j].querySelectorAll("a");
+        $links.forEach(function(link){
+          link.setAttribute('tabindex', '-1');
         });
       };
     }

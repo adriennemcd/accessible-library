@@ -160,6 +160,8 @@ var accordion = (function(){
           $tabs = $accordion.getElementsByClassName(_.settings.$tab),
           $panels = $accordion.getElementsByClassName(_.settings.$panel);
 
+      $accordion.setAttribute('role', 'presentation');
+      
       for(var j=0; j < $headings.length; j++){
         setAttributes($headings[j], {
           'role': 'heading',

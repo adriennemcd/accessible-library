@@ -1,41 +1,61 @@
 .form {
-    &__radiogroup {
-        // position: relative;
-        // width: auto;
-        
-        
-        .form__input {
-            width: auto;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer;
-        }
-        
-        .form__label {
-            margin-bottom: 5px;
-            cursor: pointer;
-            line-height: 20px;
+    $block: &;
 
-            &:before {
-                content: " ";
-                display: inline-block;
-                vertical-align: middle;
-                position: relative; 
-                top: -1px;
-                width: 20px;
-                height: 20px;
-                border-radius: 100%;
-                margin: -1px 8px 0 0;
-                box-shadow: inset 0px 0px 6px rgba(0,0,0,0.2);
-                transition: all .22s ease;
-                -webkit-transition: all .22s ease;
+    &__fieldset {
+        margin: 0 0 rem(10) 0;
+        padding: 0;
+        border: none;
+    }
+
+    &__legend {
+        margin-bottom: rem(6);
+        padding: 0;
+    }
+
+    &__radiogroup {  
+        #{$block}__label {
+            display: block;
+            margin-bottom: rem(7);
+            line-height: rem(20);
+            cursor: pointer; 
+
+            &:last-child { margin: 0; }
+        }
+
+        #{$block}__input {
+            // HTML5 Boilerplate accessible hidden styles
+            border: 0; 
+            clip: rect(0 0 0 0); 
+            height: 1px; margin: -1px; 
+            overflow: hidden; 
+            padding: 0; 
+            position: absolute; 
+            width: 1px;
+
+            + span {
+                display: block;
+
+                &:before {
+                    content: " ";
+                    display: inline-block;
+                    vertical-align: middle;
+                    position: relative; 
+                    top: -1px;
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 100%;
+                    margin: -1px 8px 0 0;
+                    box-shadow: inset 0px 0px 6px rgba(0,0,0,0.2);
+                    transition: all .22s ease;
+                    -webkit-transition: all .22s ease;
+                }
             }
-        }
 
-        input:checked + label:before,
-        input:focus + label:before {
-            background-color: $radio-checked;
-            box-shadow: none;
+            &:checked + span:before,
+            &:focus + span:before {
+                background-color: $radio-checked;
+                box-shadow: none;
+            }
         }
     }
 }

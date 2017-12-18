@@ -1,5 +1,34 @@
+// colors
+$silver: #ccc;
+
+// convert pixels to rems
+// from bourbon
+$em-base: 16;
+@function rem($pxval) {
+  @if not unitless($pxval) {
+    $pxval: strip-units($pxval);
+  }
+
+  $base: $em-base;
+  @if not unitless($base) {
+    $base: strip-units($base);
+  }
+  @return ($pxval / $base) * 1rem;
+}
+
+//component
 .form {
     $block: &;
+    &__fieldset {
+        margin: 0 0 rem(10) 0;
+        padding: 0;
+        border: none;
+    }
+
+    &__legend {
+        margin-bottom: rem(6);
+        padding: 0;
+    }
 
     &__radiogroup {  
         #{$block}__label {
@@ -23,7 +52,7 @@
 
             + span {
                 padding: rem(3);
-                
+
                 &:before {
                     content: " ";
                     display: inline-block;
@@ -42,12 +71,12 @@
 
             &:checked + span:before,
             &:focus + span:before {
-                background-color: $radio-checked;
+                background-color: $silver;
                 box-shadow: none;
             }
 
             &:focus + span {
-                outline: dotted 1px $radio-checked;
+                outline: dotted 1px $silver;
             }
         }
     }

@@ -1,0 +1,102 @@
+// colors
+$silver: #ccc;
+
+// convert pixels to rems
+// from bourbon
+$em-base: 16;
+@function rem($pxval) {
+  @if not unitless($pxval) {
+    $pxval: strip-units($pxval);
+  }
+
+  $base: $em-base;
+  @if not unitless($base) {
+    $base: strip-units($base);
+  }
+  @return ($pxval / $base) * 1rem;
+}
+
+// component
+.form {
+    $block: &;
+    &__fieldset {
+        margin: 0 0 rem(10) 0;
+        padding: 0;
+        border: none;
+    }
+
+    &__legend {
+        margin-bottom: rem(6);
+        padding: 0;
+    }
+
+    &__checkbox {  
+        #{$block}__label {
+            display: block;
+            margin-bottom: rem(7);
+            line-height: rem(20);
+            cursor: pointer; 
+
+            &:last-child { margin: 0; }
+        }
+
+        #{$block}__input {
+            // HTML5 Boilerplate accessible hidden styles
+            border: 0; 
+            clip: rect(0 0 0 0); 
+            height: 1px; margin: -1px; 
+            overflow: hidden; 
+            padding: 0; 
+            position: absolute; 
+            width: 1px;
+
+            + span {
+                position: relative;
+                padding: rem(4);
+                
+                &:before {
+                    // the check box background
+                    content: " ";
+                    display: inline-block;
+                    vertical-align: middle;
+                    position: relative; 
+                    top: -1px;
+                    width: 20px;
+                    height: 20px;
+                    margin: -1px 8px 0 0;
+                    box-shadow: inset 0px 0px 6px rgba(0,0,0,0.2);
+                    transition: all .22s ease;
+                    -webkit-transition: all .22s ease;
+                }
+
+                &:after {
+                    // css checkmark: https://codepen.io/lajlev/pen/diKbz
+                    content: '';
+                    display: block;
+                    opacity: 0;
+                    position: absolute;
+                    top: 7px;
+                    left: 11px;
+                    width: 4px;
+                    height: 8px;
+                    border: solid white;
+                    border-width: 0 2px 2px 0;
+                    transform: rotate(45deg);
+                }
+            }
+
+            &:focus + span {
+                outline: dotted 1px $silver;
+            }
+
+            &:checked + span:after {
+                opacity: 1;
+            }
+
+            &:checked + span:before {
+                box-shadow: none;
+                background: $silver;
+            }
+        }
+    }
+}

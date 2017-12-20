@@ -1,4 +1,9 @@
 .form {
+    &__label {
+      display: block;
+      margin-bottom: rem(5);
+    }
+
     &__fieldset {
         margin: 0 0 rem(10) 0;
         padding: 0;

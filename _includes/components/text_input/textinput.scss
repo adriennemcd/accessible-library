@@ -1,0 +1,28 @@
+// colors
+$silver: #ccc;
+
+// convert pixels to rems
+// from bourbon
+$em-base: 16;
+@function rem($pxval) {
+  @if not unitless($pxval) {
+    $pxval: strip-units($pxval);
+  }
+
+  $base: $em-base;
+  @if not unitless($base) {
+    $base: strip-units($base);
+  }
+  @return ($pxval / $base) * 1rem;
+}
+
+//component
+.form {
+  &__text {
+    display: block;
+    padding: rem(5);
+    font-size: inherit;
+    line-height: inherit;
+    border: 1px solid $silver;
+  }
+}

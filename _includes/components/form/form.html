@@ -1,0 +1,22 @@
+<form action="#" class="form" name="contactInfo" id="contactInfo" novalidate>
+  <a class="error__link for-example" href="#"></a>
+  <div class="error__list for-example">
+    <a href="#" class="error error__name" data-input="name"></a>
+    <a href="#" class="error error__name" data-input="date of birth"></a>
+    <a href="#" class="error error__name" data-input="email"></a>
+    <a href="#" class="error error__name" data-input="phone number"></a>
+    <a href="#" class="error error__name" data-input="day description"></a>
+  </div>
+{% include components/text_input/textinput.html %}
+{% include components/radio_button/radiobutton.html %}
+{% include components/textarea/textarea.html %}
+{% include components/checkbox/checkbox.html %}
+{% include components/select/select.html %}
+  <div class="form__item">
+    <input class="input-submit" id="submit" type="submit"/>
+  </div>
+</form>
+
+<!-- <form class="form">
+{% include components/text_input/textinput.html %}
+</form> -->

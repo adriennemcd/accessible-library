@@ -1,4 +1,21 @@
 .form {
+    $block: &;
+    &__item {
+        margin-bottom: rem(15);
+
+        &.error {
+            #{$block}__input {
+                border: 1px solid red;
+            }
+        }
+
+        &.success {
+            #{$block}__input {
+                border: 1px solid green;
+            }
+        }
+    }
+    
     &__label {
       display: block;
       margin-bottom: rem(5);

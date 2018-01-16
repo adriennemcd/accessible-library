@@ -31,4 +31,31 @@
         margin-bottom: rem(6);
         padding: 0;
     }
+
+    .error {
+        &__link {
+            display: none;
+
+            &.active {
+                display: block;
+            }
+        }
+
+        &__list {
+            display: none;
+            list-style: none;
+
+            &.active {
+                display: block;
+            }
+        }
+
+        &__item {
+            display: none;
+            
+            &.active {
+                display: block;
+            }
+        }
+    }
 }

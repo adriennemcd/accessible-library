@@ -4,14 +4,53 @@
         margin-bottom: rem(15);
 
         &.error {
+            position: relative;
+
+            &:before, &:after {
+                content: '';
+                height: 16px;
+                border-left: 3px solid red;
+                position: absolute;
+                right: 15px;
+                bottom: 33px;
+            }
+
+            &:before {
+                transform: rotate(-45deg);  
+            }
+
+            &:after {
+                transform: rotate(45deg);  
+            }
+
             #{$block}__input {
+                padding-right: rem(28);
                 border: 1px solid red;
+            }
+
+            #{$block}__error-message {
+                display: block;
             }
         }
 
         &.success {
+            position: relative;
+
+            &:after {
+                content: '';
+                display: block;
+                position: absolute;
+                bottom: 11px;
+                right: 11px;
+                width: 8px;
+                height: 16px;
+                border: solid green;
+                border-width: 0 3px 3px 0;
+                transform: rotate(45deg);
+            }
+
             #{$block}__input {
-                border: 1px solid green;
+                padding-right: rem(28);
             }
         }
     }
@@ -30,6 +69,10 @@
     &__legend {
         margin-bottom: rem(6);
         padding: 0;
+    }
+
+    &__error-message {
+        display: none;
     }
 
     .error {

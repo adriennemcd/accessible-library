@@ -1,11 +1,12 @@
 'use strict';
 
-function form(formObj, i){
+function form(formObj){
   var $form = formObj,
-      $indx = i,
       $txtInputs = $form.querySelectorAll('.form__text'),
-      $messages = $form.querySelector('.error__list'),
-      $message = $form.querySelectorAll('.error__item'),
+      $collectionInputs = $form.querySelectorAll('.form__fieldset'),
+      $selectInputs = $form.querySelectorAll('.form__select'),
+      $errorList = $form.querySelector('.error__list'),
+      $errorItem = $form.querySelectorAll('.error__item'),
       $screenReaderErrors = $form.querySelector('.error__link'),
       $formValidation = {};
 
@@ -40,7 +41,7 @@ function form(formObj, i){
       if ( checkFormValidity() ) {
         console.log('valid');
         $screenReaderErrors.classList.remove("active");
-        $messages.classList.remove("active");
+        $errorList.classList.remove("active");
         //success.fadeIn("fast");
         //success.on("click", function(){ $(this).hide(); });
       } else {
@@ -51,11 +52,11 @@ function form(formObj, i){
 
     $screenReaderErrors.addEventListener('click', function(e){
       e.preventDefault();
-      $messages.classList.add('active');
-      $messages.querySelector('.error__item.active').focus();
+      $errorList.classList.add('active');
+      $errorList.querySelector('.error__item.active').focus();
     });
 
-    $message.forEach(function(error) {
+    $errorItem.forEach(function(error) {
       error.addEventListener("click", function(e){
         e.preventDefault();
         var input = e.currentTarget.dataset.input;
@@ -64,25 +65,33 @@ function form(formObj, i){
     })
   }
 
-  function handleFormErrors() {
-    var count = 0;
-    for ( var i in $formValidation) {
-      if ( $formValidation[i] === false ) {
-        count++;
-        var inputEl = $form.querySelector('[name="'+i+'"]');
-        addError(inputEl);
-      }
-    }
-    $screenReaderErrors.innerHTML = ("There are "+count+" errors in the form you submitted. Review Errors.");
-    $screenReaderErrors.classList.add('active');
-    $screenReaderErrors.focus();
-  }
-
   // Check validity
   function checkInputValidity(input){
-    var valid = input.validity.valid;
-    $formValidation[input.name] = valid;
-    return valid;
+    var valid,
+        groupItems;
+    if(input['type'] === 'fieldset') {
+      // radio buttons and checkboxes
+      var groupItemCount = 0;
+      groupItems = input.querySelectorAll('.form__input');
+      groupItems.forEach(function(item) {
+        item.checked ? groupItemCount++ : groupItemCount;
+      });
+      groupItemCount > 0 ? valid = true : valid = false;
+      $formValidation[input.dataset.name] = valid;
+      return valid;
+    } 
+    else if (input['type'].indexOf('select') >= 0) {
+      // select-one or select-many form items
+      input.selectedIndex !== 0 ? valid = true : valid = false;
+      $formValidation[input.name] = valid;
+      return valid;
+    } 
+    else {
+      // all other form items
+      valid = input.validity.valid;
+      $formValidation[input.name] = valid;
+      return valid;
+    }  
   }
 
   function checkFormValidity(){
@@ -90,6 +99,14 @@ function form(formObj, i){
     
     // add input state to formValidation object
     $txtInputs.forEach(function(input){
+      checkInputValidity(input) ? $formValidation[input.name] = true : $formValidation[input.name] = false;
+    });
+
+    $collectionInputs.forEach(function(input){
+      checkInputValidity(input) ? $formValidation[input.dataset.name] = true : $formValidation[input.dataset.name] = false;
+    });
+
+    $selectInputs.forEach(function(input){
       checkInputValidity(input) ? $formValidation[input.name] = true : $formValidation[input.name] = false;
     });
 
@@ -103,6 +120,21 @@ function form(formObj, i){
       }
     }
     return formValid;
+  }
+
+  function handleFormErrors() {
+    console.log($formValidation);
+    var count = 0;
+    for ( var i in $formValidation) {
+      if ( $formValidation[i] === false ) {
+        count++;
+        var inputEl = $form.querySelector('[name="'+i+'"]');
+        addError(inputEl);
+      }
+    }
+    $screenReaderErrors.innerHTML = ("There are "+count+" errors in the form you submitted. Review Errors.");
+    $screenReaderErrors.classList.add('active');
+    $screenReaderErrors.focus();
   }
 
   // Handle errors in the DOM
@@ -140,8 +172,8 @@ function form(formObj, i){
 
 //call the form module for each .form on the page
 var forms = document.querySelectorAll('.form');
-forms.forEach(function(formObj, i){
-  var newForm = form(formObj, i);
+forms.forEach(function(formObj){
+  var newForm = form(formObj);
   newForm.init();
 });
 

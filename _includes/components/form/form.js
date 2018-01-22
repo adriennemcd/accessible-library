@@ -17,41 +17,44 @@ function form(formObj){
   // INITIALIZE ALL EVENT LISTENERS ====================================
 
   function handleEvents() {
-    function checkItemValidity(){ !checkInputValidity(this) ? addError(this) : removeError(this); }
+    function updateItemValidityState(){ 
+      if (!checkInputValidity(this)) {
+        addError(this);
+        removeSuccess(this);
+      } else {
+        removeError(this);
+        addSuccess(this);
+      } 
+    }
 
     $txtInputs.forEach(function(input) {
-      // check validity when typing in text inputs
-      input.addEventListener('keyup', function(e){
-        checkInputValidity(this);
-        if (checkInputValidity(this)) {
-          removeError(this);
-          addSuccess(this);
-        } else {
-          removeSuccess(this);
-        }
-      });
-
-      // check validity when focus leaves text inputs
-      input.addEventListener('blur', checkItemValidity);
+      // check validity when typing in text inputs and when focus leaves text inputs
+      input.addEventListener('keyup', updateItemValidityState);
+      input.addEventListener('blur', updateItemValidityState);
     });
 
     // check validity when focus leaves radio buttons and checkboxes
     $collectionInputs.forEach(function(group){
       var groupItems = group.querySelectorAll('.form__input');
+      function updateGroupValidityState(){
+        if (!checkInputValidity(group)) {
+          addError(this);
+          removeSuccess(this);
+        } else {
+          removeError(this);
+          addSuccess(this);
+        } 
+      }
       groupItems.forEach(function(input){
-        input.addEventListener('click', function(){
-          !checkInputValidity(group) ? addError(this) : removeError(this);
-        });
-        input.addEventListener('blur', function(){
-          !checkInputValidity(group) ? addError(this) : removeError(this);
-        });
+        input.addEventListener('click', updateGroupValidityState);
+        input.addEventListener('blur', updateGroupValidityState);
       });
     });
 
-    // check validity when focus leaves select
+    // check validity when select option is changed and when focus leaves select
     $selectInputs.forEach(function(select){
-      select.addEventListener('change', checkItemValidity);
-      select.addEventListener('blur', checkItemValidity);
+      select.addEventListener('change', updateItemValidityState);
+      select.addEventListener('blur', updateItemValidityState);
     });
 
     // check validity when form is submitted
@@ -148,7 +151,6 @@ function form(formObj){
   // HANDLE ERRORS =====================================================
 
   function handleFormErrors() {
-    console.log($formValidation);
     var count = 0;
     for ( var i in $formValidation) {
       if ( $formValidation[i] === false ) {
@@ -164,7 +166,6 @@ function form(formObj){
 
   // Handle errors in the DOM
   function addError(input){
-    console.log(input);
     var srErrorMsg = $form.querySelector('a[data-input="'+input.name+'"]');
     var capitalInput = input.name.charAt(0).toUpperCase() + input.name.slice(1);
     var wrapper = input.closest('.form__item'); // NEED .CLOSEST POLYFILL FOR IE10, IE11

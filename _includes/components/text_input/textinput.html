@@ -1,9 +1,9 @@
 <div class="form__item">
   <label for="name" class="form__label">Name<span aria-hidden="true">*</span></label>
   <input id="name" type="text" name="name" class="form__input form__text" required>
-  <span id="nameError" class="sr form__error-message" aria-live="polite"></span>
-  <span id="nameError" class="form__error-message" aria-hidden="true">Name invalid</span>
+  <span class="form__error-message" aria-live="polite"></span>
 </div>
+
 <div class="form__item">
   <label class="form__label" for="dateOfBirth">Date of birth<span aria-hidden="true">*</span><span class="form__helper-text" aria-hidden="true">MM/DD/YYYY</span>
   </label>
@@ -15,9 +15,9 @@
          name="date of birth" 
          pattern="(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d" 
          required />
-  <span id="dateOfBirthError" class="sr form__error-message" aria-live="polite"></span>
-  <span id="dateOfBirthError" class="form__error-message" aria-hidden="true">Date of birth invalid</span>
+  <span class="form__error-message" aria-live="polite"></span>
 </div>
+
 <div class="form__item">
   <label class="form__label" for="email">Email<span aria-hidden="true">*</span></label>
   <input class="form__input form__text" 
@@ -26,9 +26,9 @@
          name="email"
          pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?" 
          required />
-  <span id="emailError" class="sr form__error-message" aria-live="polite"></span>
-  <span id="emailError" class="form__error-message" aria-hidden="true">Email invalid</span>
+  <span class="form__error-message" aria-live="polite"></span>
 </div>
+
 <div class="form__item">
   <label class="form__label" for="phone">Phone number<span aria-hidden="true">*</span></label>
   <input class="form__input form__text" 
@@ -37,7 +37,6 @@
          name="phone number"
          pattern="[0-9]*" 
          required />
-  <span id="emailError" class="sr form__error-message" aria-live="polite"></span>
-  <span id="emailError" class="form__error-message" aria-hidden="true">Phone number invalid</span>
+  <span class="form__error-message" aria-live="polite"></span>
 </div>
 

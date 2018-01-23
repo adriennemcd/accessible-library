@@ -2,6 +2,7 @@
 
 function form(formObj){
   var $form = formObj,
+      $allInputs = $form.querySelectorAll('.form__input'),
       $txtInputs = $form.querySelectorAll('.form__text'),
       $collectionInputs = $form.querySelectorAll('.form__fieldset'),
       $selectInputs = $form.querySelectorAll('.form__select'),
@@ -53,13 +54,10 @@ function form(formObj){
     // check validity when form is submitted
     $form.addEventListener('submit', function(e) {
       e.preventDefault();
-      // Each time the user tries to send the data, check if the form is valid.
       if ( checkFormValidity() ) {
         console.log('valid');
         $screenReaderErrors.classList.remove("active");
         $errorList.classList.remove("active");
-        //success.fadeIn("fast");
-        //success.on("click", function(){ $(this).hide(); });
       } else {
         console.log('not valid');
         handleFormErrors();
@@ -74,12 +72,10 @@ function form(formObj){
     });
 
     // listen for when hidden screen reader error descriptions are clicked
-    $errorItem.forEach(function(error) {
-      error.addEventListener("click", function(e){
-        e.preventDefault();
-        var input = e.currentTarget.dataset.input;
-        $form.querySelector("[name='"+input+"']").focus();
-      });
+    $errorList.addEventListener('click', function(e){
+      e.preventDefault();
+      var input = e.target.dataset.input;
+      $form.querySelector("[name='"+input+"']").focus();
     })
   }
 
@@ -115,6 +111,18 @@ function form(formObj){
 
   function checkFormValidity(){
     var formValid;
+
+    // build the screen reader error messages
+    function buildErrorMessages(){
+      var errorMessageHTML = [];
+      $allInputs.forEach(function(input){
+        var inputHTML = '<a href="#" class="error__item" data-input="';
+            inputHTML += input['name'];
+            inputHTML += '"></a>';
+        if (errorMessageHTML.indexOf(inputHTML) == -1) errorMessageHTML.push(inputHTML);
+      });
+      $errorList.innerHTML = errorMessageHTML.join('');
+    }
     
     // add input state to formValidation object
     $txtInputs.forEach(function(input){
@@ -131,6 +139,7 @@ function form(formObj){
     for ( var i in $formValidation) {
       if ( $formValidation[i] === false ) {
         formValid = false;
+        buildErrorMessages();
         break;
       } else {
         formValid = true;
@@ -162,22 +171,24 @@ function form(formObj){
         wrapper = input.closest('.form__item'), // NEED .CLOSEST POLYFILL FOR IE10, IE11
         inputErrorMsg = wrapper.querySelector('.form__error-message');
 
-    srErrorMsg.classList.add('active');
+    if (srErrorMsg) srErrorMsg.classList.add('active'); // if form hasn't been submitted, these links won't have been created yet
     wrapper.classList.add('error');
     
     if (input.validity.valueMissing || input['type'].indexOf('select') >= 0 || input['type'] == 'checkbox') {
       inputErrorMsg.innerHTML = capitalInput+' is required';
-      srErrorMsg.innerHTML = capitalInput+' is required. Press enter to focus on this field.';
+      if (srErrorMsg) srErrorMsg.innerHTML = capitalInput+' is required. Press enter to edit.';
     } else {
       inputErrorMsg.innerHTML = capitalInput+' format is invalid';
-      srErrorMsg.innerHTML = capitalInput+' format is invalid. Press enter to focus on this field.';
+      if (srErrorMsg) srErrorMsg.innerHTML = capitalInput+' format is invalid. Press enter to edit.';
     }
   }
 
   function removeError(input){
-    var wrapper = input.closest('.form__item');
+    var wrapper = input.closest('.form__item'),
+        srErrorMsg = $form.querySelector('a[data-input="'+input.name+'"]');
     wrapper.classList.remove('error');
-    $form.querySelector('a[data-input="'+input.name+'"]').classList.remove('active');
+    // if form hasn't been submitted, these links won't have been created yet
+    if (srErrorMsg) srErrorMsg.classList.remove('active');
   }
 
   return {

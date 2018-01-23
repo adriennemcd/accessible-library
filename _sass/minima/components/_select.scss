@@ -1,4 +1,13 @@
 .form {
+  $block: &;
+
+  &__item.error {
+    #{$block}__select {
+      padding-right: rem(40);
+      border: 0;
+    }
+  }
+
   &__select {
     background-color: $silver;
     padding: rem(8);
@@ -48,5 +57,9 @@
       border-right: 5px solid transparent;
       border-top: 7px solid white;
     }
+  }
+
+  &.error {
+
   }
 } 

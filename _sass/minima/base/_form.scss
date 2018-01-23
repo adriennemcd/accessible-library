@@ -1,7 +1,7 @@
 .form {
     $block: &;
     &__item {
-        margin-bottom: rem(25);
+        margin-bottom: rem(20);
 
         &.error {
             #{$block}__input {

@@ -1,11 +1,11 @@
 <div class="form__item">
-  <label for="name" class="form__label">Name<span aria-hidden="true">*</span></label>
+  <label for="name" class="form__label">Name<span class="form__asterisk-req" aria-hidden="true">*</span></label>
   <input id="name" type="text" name="name" class="form__input form__text" required>
   <span class="form__error-message" aria-live="polite"></span>
 </div>
 
 <div class="form__item">
-  <label class="form__label" for="dateOfBirth">Date of birth<span aria-hidden="true">*</span><span class="form__helper-text" aria-hidden="true">MM/DD/YYYY</span>
+  <label class="form__label" for="dateOfBirth">Date of birth<span class="form__asterisk-req" aria-hidden="true">*</span><span class="form__helper-text" aria-hidden="true">MM/DD/YYYY</span>
   </label>
   <span class="sr" id="dateFormat">Format two digit month, two digit day, four digit year</span>
   <input class="form__input form__text" 
@@ -19,7 +19,7 @@
 </div>
 
 <div class="form__item">
-  <label class="form__label" for="email">Email<span aria-hidden="true">*</span></label>
+  <label class="form__label" for="email">Email<span class="form__asterisk-req" aria-hidden="true">*</span></label>
   <input class="form__input form__text" 
          id="email" 
          type="text" 
@@ -30,7 +30,7 @@
 </div>
 
 <div class="form__item">
-  <label class="form__label" for="phone">Phone number<span aria-hidden="true">*</span></label>
+  <label class="form__label" for="phone">Phone number<span class="form__asterisk-req" aria-hidden="true">*</span></label>
   <input class="form__input form__text" 
          id="phone" 
          type="tel" 
@@ -39,4 +39,3 @@
          required />
   <span class="form__error-message" aria-live="polite"></span>
 </div>
-

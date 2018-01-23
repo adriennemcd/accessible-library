@@ -17,13 +17,12 @@ function form(formObj){
   // INITIALIZE ALL EVENT LISTENERS ====================================
 
   function handleEvents() {
-    function updateItemValidityState(){ 
-      if (!checkInputValidity(this)) {
+    function updateItemValidityState(e){ 
+      // don't add errors if the event is simply tabbing through the form
+      if (e.key !== 'Tab' && !checkInputValidity(this)) {
         addError(this);
-        removeSuccess(this);
-      } else {
+      } else if (e.key !== 'Tab') {
         removeError(this);
-        addSuccess(this);
       } 
     }
 
@@ -33,17 +32,11 @@ function form(formObj){
       input.addEventListener('blur', updateItemValidityState);
     });
 
-    // check validity when focus leaves radio buttons and checkboxes
+    // check validity when radio buttons and checkboxes are selected or when focus leaves them
     $collectionInputs.forEach(function(group){
       var groupItems = group.querySelectorAll('.form__input');
       function updateGroupValidityState(){
-        if (!checkInputValidity(group)) {
-          addError(this);
-          removeSuccess(this);
-        } else {
-          removeError(this);
-          addSuccess(this);
-        } 
+        !checkInputValidity(group) ? addError(this) : removeError(this); 
       }
       groupItems.forEach(function(input){
         input.addEventListener('click', updateGroupValidityState);
@@ -60,7 +53,7 @@ function form(formObj){
     // check validity when form is submitted
     $form.addEventListener('submit', function(e) {
       e.preventDefault();
-      // Each time the user tries to send the data, we check if the form is valid.
+      // Each time the user tries to send the data, check if the form is valid.
       if ( checkFormValidity() ) {
         console.log('valid');
         $screenReaderErrors.classList.remove("active");
@@ -127,11 +120,9 @@ function form(formObj){
     $txtInputs.forEach(function(input){
       $formValidation[input.name] = checkInputValidity(input) ? true : false;
     });
-
     $collectionInputs.forEach(function(input){
       $formValidation[input.dataset.name] = checkInputValidity(input) ? true : false;
     });
-
     $selectInputs.forEach(function(input){
       $formValidation[input.name] = checkInputValidity(input) ? true : false;
     });
@@ -159,27 +150,27 @@ function form(formObj){
         addError(inputEl);
       }
     }
-    $screenReaderErrors.innerHTML = ("There are "+count+" errors in the form you submitted. Review Errors.");
+    $screenReaderErrors.innerHTML = ("There are "+count+" errors in the form you submitted. Press enter to review Errors.");
     $screenReaderErrors.classList.add('active');
     $screenReaderErrors.focus();
   }
 
   // Handle errors in the DOM
   function addError(input){
-    var srErrorMsg = $form.querySelector('a[data-input="'+input.name+'"]');
-    var capitalInput = input.name.charAt(0).toUpperCase() + input.name.slice(1);
-    var wrapper = input.closest('.form__item'); // NEED .CLOSEST POLYFILL FOR IE10, IE11
-    var inputErrorMsg = wrapper.querySelector('.form__error-message');
+    var srErrorMsg = $form.querySelector('a[data-input="'+input.name+'"]'),
+        capitalInput = input.name.charAt(0).toUpperCase() + input.name.slice(1),
+        wrapper = input.closest('.form__item'), // NEED .CLOSEST POLYFILL FOR IE10, IE11
+        inputErrorMsg = wrapper.querySelector('.form__error-message');
 
     srErrorMsg.classList.add('active');
     wrapper.classList.add('error');
     
-    if (input.validity.valueMissing) {
+    if (input.validity.valueMissing || input['type'].indexOf('select') >= 0 || input['type'] == 'checkbox') {
       inputErrorMsg.innerHTML = capitalInput+' is required';
-      srErrorMsg.innerHTML = capitalInput+' is required';
+      srErrorMsg.innerHTML = capitalInput+' is required. Press enter to focus on this field.';
     } else {
       inputErrorMsg.innerHTML = capitalInput+' format is invalid';
-      srErrorMsg.innerHTML = capitalInput+' format is invalid';
+      srErrorMsg.innerHTML = capitalInput+' format is invalid. Press enter to focus on this field.';
     }
   }
 
@@ -189,24 +180,13 @@ function form(formObj){
     $form.querySelector('a[data-input="'+input.name+'"]').classList.remove('active');
   }
 
-  function addSuccess(input) {
-    var wrapper = input.closest('.form__item');
-    wrapper.classList.add('success');
-  }
-
-  function removeSuccess(input) {
-    var wrapper = input.closest('.form__item');
-    wrapper.classList.remove('success');
-  }
-
   return {
     init: init
   }
 };
 
 //call the form module for each .form on the page
-var forms = document.querySelectorAll('.js-form');
-forms.forEach(function(formObj){
+document.querySelectorAll('.js-form').forEach(function(formObj){
   var newForm = form(formObj);
   newForm.init();
 });

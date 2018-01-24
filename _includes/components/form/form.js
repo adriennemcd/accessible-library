@@ -30,6 +30,8 @@ function form(formObj){
       // check validity when typing in text inputs and when focus leaves text inputs
       input.addEventListener('keyup', updateItemValidityState);
       input.addEventListener('blur', updateItemValidityState);
+
+      if (input.classList.contains('js-form__date')) input.addEventListener('keyup', formatDate);
     });
 
     // check validity when radio buttons and checkboxes are selected or when focus leaves them
@@ -191,14 +193,30 @@ function form(formObj){
     if (srErrorMsg) srErrorMsg.classList.remove('active');
   }
 
-  // CLEAN UP BEFORE SUBMISSION ========================================
+  // UTILITY FUNCTIONS =================================================
 
   function cleanPhone(){
-    // remove all non-digit characters from phone input
+    // remove all non-digit characters from phone input before submission
     var phoneInputs = $form.querySelectorAll('.js-form__phone');
     phoneInputs.forEach(function(input){
       input.value = input.value.replace(/\D/g,'');
     });
+  }
+
+  function formatDate(e){
+    // add date formatting as the user types
+    if (e.key !== 'Tab') {
+      switch (e.target.value.length) {
+        case 2:
+        case 5:
+          if (e.key !== 'Delete' && e.key !== 'Backspace') {
+            e.target.value = e.target.value + '/';
+          } else {
+            e.target.value = e.target.value.slice(0,e.target.value.length-1);
+          }
+          break;
+      }
+    }
   }
 
   return {

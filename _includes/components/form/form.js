@@ -8,7 +8,6 @@ function form(formObj){
       $selectInputs = $form.querySelectorAll('.form__select'),
       $screenReaderErrors = $form.querySelector('.error__link'),
       $errorList = $form.querySelector('.error__list'),
-      $errorItem = $form.querySelectorAll('.error__item'),
       $formValidation = {};
 
   function init() {
@@ -58,6 +57,7 @@ function form(formObj){
         console.log('valid');
         $screenReaderErrors.classList.remove("active");
         $errorList.classList.remove("active");
+        cleanPhone();
       } else {
         console.log('not valid');
         handleFormErrors();
@@ -191,6 +191,16 @@ function form(formObj){
     if (srErrorMsg) srErrorMsg.classList.remove('active');
   }
 
+  // CLEAN UP BEFORE SUBMISSION ========================================
+
+  function cleanPhone(){
+    // remove all non-digit characters from phone input
+    var phoneInputs = $form.querySelectorAll('.js-form__phone');
+    phoneInputs.forEach(function(input){
+      input.value = input.value.replace(/\D/g,'');
+    });
+  }
+
   return {
     init: init
   }
@@ -198,7 +208,6 @@ function form(formObj){
 
 //call the form module for each .form on the page
 document.querySelectorAll('.js-form').forEach(function(formObj){
-  var newForm = form(formObj);
-  newForm.init();
+  form(formObj).init();
 });
 

@@ -27,12 +27,15 @@
   <span class="form__error-message" aria-live="polite"></span>
 </div>
 <div class="form__item">
-  <label class="form__label" for="phone">Phone number<span class="form__asterisk-req" aria-hidden="true">*</span></label>
-  <input class="form__input form__text" 
+  <label class="form__label" for="phone">Phone number<span class="form__asterisk-req" aria-hidden="true">*</span><span class="form__helper-text" aria-hidden="true">10-digit number</span>
+  </label>
+  <span class="sr" id="phoneFormat">Format as 10 digit number. Hyphens, parentheses, and spaces are not required</span>
+  <input class="form__input form__text js-form__phone" 
          id="phone" 
+         aria-describedby="phoneFormat"
          type="tel" 
          name="phone number"
-         pattern="[0-9]*" 
+         pattern="^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$" 
          required />
   <span class="form__error-message" aria-live="polite"></span>
 </div>

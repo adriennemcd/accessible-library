@@ -1,16 +1,18 @@
 'use strict';
 
 function form(formObj){
+  // validation pattern based off of the example in this article: https://cantina.co/form-errors-screen-readers-can-access/
   var $form = formObj,
-      $allInputs = $form.querySelectorAll('.form__input'),
-      $txtInputs = $form.querySelectorAll('.form__text'),
-      $collectionInputs = $form.querySelectorAll('.form__fieldset'),
-      $selectInputs = $form.querySelectorAll('.form__select'),
-      $screenReaderErrors = $form.querySelector('.error__link'),
-      $errorList = $form.querySelector('.error__list'),
+      $allInputs = $form.querySelectorAll('.js-form__input'),
+      $txtInputs = $form.querySelectorAll('[type^="te"].js-form__input, textarea.js-form__input'),
+      $collectionInputs = $form.querySelectorAll('.js-form__fieldset'),
+      $selectInputs = $form.querySelectorAll('select.js-form__input'),
+      $errorSummaryLink = $form.querySelector('.js-form__error-link'),
+      $errorList = $form.querySelector('.js-form__error-list'),
       $formValidation = {};
 
   function init() {
+    polyfillsES6();
     handleEvents();
   }
 
@@ -18,7 +20,7 @@ function form(formObj){
 
   function handleEvents() {
     function updateItemValidityState(e){ 
-      // don't add errors if the event is simply tabbing through the form
+      // don't check for an error when the user first tabs into an input field
       if (e.key !== 'Tab' && !checkInputValidity(this)) {
         addError(this);
       } else if (e.key !== 'Tab') {
@@ -27,7 +29,7 @@ function form(formObj){
     }
 
     $txtInputs.forEach(function(input) {
-      // check validity when typing in text inputs and when focus leaves text inputs
+      // check validity when typing in text/tel inputs and when focus leaves text/tel inputs
       input.addEventListener('keyup', updateItemValidityState);
       input.addEventListener('blur', updateItemValidityState);
 
@@ -36,7 +38,7 @@ function form(formObj){
 
     // check validity when radio buttons and checkboxes are selected or when focus leaves them
     $collectionInputs.forEach(function(group){
-      var groupItems = group.querySelectorAll('.form__input');
+      var groupItems = group.querySelectorAll('.js-form__input');
       function updateGroupValidityState(){
         !checkInputValidity(group) ? addError(this) : removeError(this); 
       }
@@ -56,8 +58,8 @@ function form(formObj){
     $form.addEventListener('submit', function(e) {
       e.preventDefault();
       if ( checkFormValidity() ) {
-        console.log('valid');
-        $screenReaderErrors.classList.remove("active");
+        alert('Form is valid!'); // CHANGE TO SEND DATA TO SERVER
+        $errorSummaryLink.classList.remove("active");
         $errorList.classList.remove("active");
         cleanPhone();
       } else {
@@ -66,14 +68,14 @@ function form(formObj){
       }
     });
 
-    // listen for when hidden screen reader error link is clicked
-    $screenReaderErrors.addEventListener('click', function(e){
+    // listen for when hidden screen reader error summary link is clicked
+    $errorSummaryLink.addEventListener('click', function(e){
       e.preventDefault();
       $errorList.classList.add('active');
-      $errorList.querySelector('.error__item.active').focus();
+      $errorList.querySelector('.js-form__error-item.active').focus();
     });
 
-    // listen for when hidden screen reader error descriptions are clicked
+    // listen for when hidden screen reader error description links are clicked
     $errorList.addEventListener('click', function(e){
       e.preventDefault();
       var input = e.target.dataset.input;
@@ -89,7 +91,7 @@ function form(formObj){
     if(input['type'] === 'fieldset') {
       // radio buttons and checkboxes
       var groupItemCount = 0;
-      groupItems = input.querySelectorAll('.form__input');
+      groupItems = input.querySelectorAll('.js-form__input');
       groupItems.forEach(function(item) {
         item.checked ? groupItemCount++ : groupItemCount;
       });
@@ -118,7 +120,7 @@ function form(formObj){
     function buildErrorMessages(){
       var errorMessageHTML = [];
       $allInputs.forEach(function(input){
-        var inputHTML = '<a href="#" class="error__item" data-input="';
+        var inputHTML = '<a href="#" class="js-form__error-item" data-input="';
             inputHTML += input['name'];
             inputHTML += '"></a>';
         if (errorMessageHTML.indexOf(inputHTML) == -1) errorMessageHTML.push(inputHTML);
@@ -161,17 +163,17 @@ function form(formObj){
         addError(inputEl);
       }
     }
-    $screenReaderErrors.innerHTML = ("There are "+count+" errors in the form you submitted. Press enter to review Errors.");
-    $screenReaderErrors.classList.add('active');
-    $screenReaderErrors.focus();
+    $errorSummaryLink.innerHTML = ("There are "+count+" errors in the form you submitted. Press enter to review Errors.");
+    $errorSummaryLink.classList.add('active');
+    $errorSummaryLink.focus();
   }
 
   // Handle errors in the DOM
   function addError(input){
     var srErrorMsg = $form.querySelector('a[data-input="'+input.name+'"]'),
         capitalInput = input.name.charAt(0).toUpperCase() + input.name.slice(1),
-        wrapper = input.closest('.form__item'), // NEED .CLOSEST POLYFILL FOR IE10, IE11
-        inputErrorMsg = wrapper.querySelector('.form__error-message');
+        wrapper = input.closest('.js-form__item'),
+        inputErrorMsg = wrapper.querySelector('.js-form__error-message');
 
     if (srErrorMsg) srErrorMsg.classList.add('active'); // if form hasn't been submitted, these links won't have been created yet
     wrapper.classList.add('error');
@@ -186,7 +188,7 @@ function form(formObj){
   }
 
   function removeError(input){
-    var wrapper = input.closest('.form__item'),
+    var wrapper = input.closest('.js-form__item'),
         srErrorMsg = $form.querySelector('a[data-input="'+input.name+'"]');
     wrapper.classList.remove('error');
     // if form hasn't been submitted, these links won't have been created yet
@@ -216,6 +218,26 @@ function form(formObj){
           }
           break;
       }
+    }
+  }
+
+  function polyfillsES6(){
+    // MDN polyfill: https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#Polyfill
+    if (!Element.prototype.matches) {
+      Element.prototype.matches = Element.prototype.msMatchesSelector || 
+                                  Element.prototype.webkitMatchesSelector;
+    }
+
+    if (!Element.prototype.closest) {
+      Element.prototype.closest = function(s) {
+        var el = this;
+        if (!document.documentElement.contains(el)) return null;
+        do {
+            if (el.matches(s)) return el;
+            el = el.parentElement || el.parentNode;
+        } while (el !== null && el.nodeType === 1); 
+        return null;
+      };
     }
   }
 

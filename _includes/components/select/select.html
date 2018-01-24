@@ -1,7 +1,7 @@
-<div class="form__item">
-  <label for="select-volunteertype" class="form__label">What form of volunteering are you most interested in?<span class="form__asterisk-req" aria-hidden="true">*</span></label>
+<div class="form__item js-form__item">
+  <label for="select-volunteertype" class="form__label form__required">What form of volunteering are you most interested in?</label>
   <span class="form__select-wrapper">
-      <select id="select-volunteertype" name="volunteer type" class="form__select form__input" required>
+      <select id="select-volunteertype" name="volunteer type" class="form__select form__input js-form__input" required>
           <option aria-hidden="true">Choose an option</option>
           <option value="socialmedia">Social media</option>
           <option value="teaching">Teaching</option>  
@@ -9,5 +9,5 @@
           <option value="fundraising">Fundraising</option>
       </select>
   </span>
-  <span class="form__error-message" aria-live="polite"></span>
+  <span class="form__error-message js-form__error-message" aria-live="polite"></span>
 </div>

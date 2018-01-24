@@ -38,6 +38,11 @@
     &__label {
       display: block;
       margin-bottom: rem(5);
+      line-height: 1;
+    }
+
+    &__input {
+        margin-top: 5px;
     }
 
     &__fieldset {
@@ -49,15 +54,18 @@
     &__legend {
         margin-bottom: rem(6);
         padding: 0;
+        line-height: 1;
     }
 
     &__helper-text {
         display: block;
         color: $helper-text;
-        font-size: rem(12);
+        font-size: rem(13);
+        line-height: 1;
     }
 
-    &__asterisk-req {
+    &__required:after {
+        content: '\*';
         padding-left: 2px;
     }
 
@@ -65,8 +73,9 @@
         display: none;
     }
 
-    .error {
-        &__link {
+    // error links specifically for screen readers, visually hidden from user
+    &__error {
+        &-link {
             display: none;
 
             &.active {
@@ -74,7 +83,7 @@
             }
         }
 
-        &__list {
+        &-list {
             display: none;
             list-style: none;
 
@@ -83,7 +92,7 @@
             }
         }
 
-        &__item {
+        &-item {
             display: none;
             
             &.active {

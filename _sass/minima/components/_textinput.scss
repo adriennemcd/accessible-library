@@ -1,10 +1,12 @@
 .form {
-  &__text {
-    display: block;
-    width: 100%;
-    padding: rem(5);
-    font-size: inherit;
-    line-height: inherit;
-    border: 1px solid $silver;
+  &__input {
+    &--text {
+      display: block;
+      width: 100%;
+      padding: rem(5);
+      font-size: inherit;
+      line-height: inherit;
+      border: 1px solid $silver;
+    }
   }
 }

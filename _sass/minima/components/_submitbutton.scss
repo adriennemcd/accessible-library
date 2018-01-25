@@ -1,0 +1,10 @@
+.form {
+  &__submit {
+    padding: 10px 25px;
+    font-size: inherit;
+    background: $silver;
+    line-height: 1;
+    border: none;
+    cursor: pointer;
+  }
+}

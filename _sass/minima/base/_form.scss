@@ -3,6 +3,10 @@
     &__item {
         margin-bottom: rem(20);
 
+        &:first-of-type { 
+            margin-top: 15px; // to account for error message box 
+        }
+
         &.error {
             #{$block}__input {
                 padding-right: rem(28);
@@ -65,8 +69,9 @@
     }
 
     &__required:after {
-        content: '\*';
+        content: '*';
         padding-left: 2px;
+        color: red;
     }
 
     &__error-message {
@@ -77,6 +82,8 @@
     &__error {
         &-link {
             display: none;
+            padding: 15px;
+            background: $silver-lt;
 
             &.active {
                 display: block;
@@ -85,7 +92,10 @@
 
         &-list {
             display: none;
-            list-style: none;
+            margin: 0;
+            padding: 0 15px 15px;
+            background: $silver-lt;
+            list-style-position: inside;
 
             &.active {
                 display: block;
@@ -96,7 +106,7 @@
             display: none;
             
             &.active {
-                display: block;
+                display: list-item;
             }
         }
     }

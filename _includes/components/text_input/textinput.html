@@ -5,7 +5,7 @@
          name="name" 
          class="form__input form__input--text js-form__input" 
          required>
-  <span class="form__error-message js-form__error-message" aria-live="polite"></span>
+  <span class="form__error-message js-form__error-message"></span>
 </div>
 <div class="form__item js-form__item">
   <label class="form__label form__required" for="dateOfBirth">Date of birth</label>
@@ -18,7 +18,7 @@
          name="date of birth" 
          pattern="(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d" 
          required />
-  <span class="form__error-message js-form__error-message" aria-live="polite"></span>
+  <span class="form__error-message js-form__error-message"></span>
 </div>
 <div class="form__item js-form__item">
   <label class="form__label form__required" for="email">Email</label>
@@ -29,12 +29,12 @@
          name="email"
          pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?" 
          required />
-  <span class="form__error-message js-form__error-message" aria-live="polite"></span>
+  <span class="form__error-message js-form__error-message"></span>
 </div>
 <div class="form__item js-form__item">
   <label class="form__label form__required" for="phone">Phone number</label>
   <span class="form__helper-text" aria-hidden="true">10-digit number</span>
-  <span class="sr" id="phoneFormat">Format as 10 digit number. Hyphens, parentheses, and spaces are not required</span>
+  <span class="sr" id="phoneFormat">Format as ten digit number. Hyphens, parentheses, and/or spaces are not required</span>
   <input class="form__input form__input--text js-form__input js-form__phone" 
          id="phone" 
          aria-describedby="phoneFormat"
@@ -42,5 +42,5 @@
          name="phone number"
          pattern="^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$" 
          required />
-  <span class="form__error-message js-form__error-message" aria-live="polite"></span>
+  <span class="form__error-message js-form__error-message"></span>
 </div>

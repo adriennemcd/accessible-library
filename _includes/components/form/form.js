@@ -20,12 +20,7 @@ function form(formObj){
 
   function handleEvents() {
     function updateItemValidityState(e){ 
-      // don't check for an error when the user first tabs into an input field
-      if (e.key !== 'Tab' && !checkInputValidity(this)) {
-        addError(this);
-      } else if (e.key !== 'Tab') {
-        removeError(this);
-      } 
+      !checkInputValidity(this) ? addError(this, false) : removeError(this);
     }
 
     $txtInputs.forEach(function(input) {
@@ -40,7 +35,7 @@ function form(formObj){
     $collectionInputs.forEach(function(group){
       var groupItems = group.querySelectorAll('.js-form__input');
       function updateGroupValidityState(){
-        !checkInputValidity(group) ? addError(this) : removeError(this); 
+        !checkInputValidity(group) ? addError(this, false) : removeError(this); 
       }
       groupItems.forEach(function(input){
         input.addEventListener('click', updateGroupValidityState);
@@ -68,18 +63,17 @@ function form(formObj){
       }
     });
 
-    // listen for when hidden screen reader error summary link is clicked
+    // listen for when screen reader error summary link is clicked
     $errorSummaryLink.addEventListener('click', function(e){
       e.preventDefault();
       $errorList.classList.add('active');
-      $errorList.querySelector('.js-form__error-item.active').focus();
+      $errorList.querySelector('.js-form__error-item.active a').focus();
     });
 
-    // listen for when hidden screen reader error description links are clicked
+    // listen for when screen reader error description links are clicked
     $errorList.addEventListener('click', function(e){
       e.preventDefault();
-      var input = e.target.dataset.input;
-      $form.querySelector("[name='"+input+"']").focus();
+      $form.querySelector("[name='"+e.target.dataset.input+"']").focus();
     })
   }
 
@@ -120,9 +114,9 @@ function form(formObj){
     function buildErrorMessages(){
       var errorMessageHTML = [];
       $allInputs.forEach(function(input){
-        var inputHTML = '<a href="#" class="js-form__error-item" data-input="';
+        var inputHTML = '<li class="form__error-item js-form__error-item"><a href="#" data-input="';
             inputHTML += input['name'];
-            inputHTML += '"></a>';
+            inputHTML += '"></a></li>';
         if (errorMessageHTML.indexOf(inputHTML) == -1) errorMessageHTML.push(inputHTML);
       });
       $errorList.innerHTML = errorMessageHTML.join('');
@@ -160,39 +154,73 @@ function form(formObj){
       if ( $formValidation[i] === false ) {
         count++;
         var inputEl = $form.querySelector('[name="'+i+'"]');
-        addError(inputEl);
+        addError(inputEl, true);
       }
     }
-    $errorSummaryLink.innerHTML = ("There are "+count+" errors in the form you submitted. Press enter to review Errors.");
+    $errorSummaryLink.innerHTML = ("There are "+count+" errors in the form you submitted.");
     $errorSummaryLink.classList.add('active');
     $errorSummaryLink.focus();
   }
 
   // Handle errors in the DOM
-  function addError(input){
-    var srErrorMsg = $form.querySelector('a[data-input="'+input.name+'"]'),
-        capitalInput = input.name.charAt(0).toUpperCase() + input.name.slice(1),
-        wrapper = input.closest('.js-form__item'),
-        inputErrorMsg = wrapper.querySelector('.js-form__error-message');
-
-    if (srErrorMsg) srErrorMsg.classList.add('active'); // if form hasn't been submitted, these links won't have been created yet
-    wrapper.classList.add('error');
+  function addError(input, formSubmit){
+    var inputParent = input.closest('.js-form__item'),
+        capitalizedInput = input.name.charAt(0).toUpperCase() + input.name.slice(1),
+        inputErrorMsg = inputParent.querySelector('.js-form__error-message'),
+        srErrorMsg = $form.querySelector('a[data-input="'+input.name+'"]');
     
-    if (input.validity.valueMissing || input['type'].indexOf('select') >= 0 || input['type'] == 'checkbox') {
-      inputErrorMsg.innerHTML = capitalInput+' is required';
-      if (srErrorMsg) srErrorMsg.innerHTML = capitalInput+' is required. Press enter to edit.';
-    } else {
-      inputErrorMsg.innerHTML = capitalInput+' format is invalid';
-      if (srErrorMsg) srErrorMsg.innerHTML = capitalInput+' format is invalid. Press enter to edit.';
+    switch (formSubmit) {
+      case true:
+        // we are adding errors after the form has been submitted. Ascertain whether this is a 'required' or 'invalid' error
+        if (input.validity.valueMissing || input['type'].indexOf('select') >= 0 || input['type'] == 'checkbox') {
+          inputErrorMsg.innerHTML = capitalizedInput+' is required';
+          if (srErrorMsg) srErrorMsg.innerHTML = capitalizedInput+' is required.';
+        } else {
+          inputErrorMsg.innerHTML = capitalizedInput+' format is invalid';
+          if (srErrorMsg) srErrorMsg.innerHTML = capitalizedInput+' format is invalid.';
+        }
+        if (srErrorMsg) srErrorMsg.parentElement.classList.add('active'); // if form hasn't been submitted, these links won't have been created yet
+        inputParent.classList.add('error');
+        break;
+      case false:
+        // we are adding just-in-time 'invalid' errors only as the user types. 'Required' errors are ignored until form submit
+        if (!input.validity.valueMissing && (input.type == 'text' || input.type == 'tel') ||
+            input.checked && input['type'].indexOf('select') >= 0 ||
+            input.checked && input['type'] == 'checkbox') {
+          inputErrorMsg.innerHTML = capitalizedInput+' format is invalid';
+          if (srErrorMsg) {
+            srErrorMsg.innerHTML = capitalizedInput+' format is invalid.';
+            srErrorMsg.parentElement.classList.add('active');
+          } 
+          inputParent.classList.add('error');
+        }
+        break;
     }
   }
 
   function removeError(input){
-    var wrapper = input.closest('.js-form__item'),
-        srErrorMsg = $form.querySelector('a[data-input="'+input.name+'"]');
-    wrapper.classList.remove('error');
-    // if form hasn't been submitted, these links won't have been created yet
-    if (srErrorMsg) srErrorMsg.classList.remove('active');
+    var inputParent = input.closest('.js-form__item'),
+        srErrorMsg = $form.querySelector('a[data-input="'+input.name+'"]'),
+        initErrorCount = $errorList.querySelectorAll('.active').length,
+        newErrorCount;
+    inputParent.classList.remove('error');
+
+    // if form hasn't been submitted (removing an inline invalid error), these links won't have been created yet
+    if (srErrorMsg) srErrorMsg.parentElement.classList.remove('active');
+
+    // update error count. Hide the summary message if all errors are fixed
+    newErrorCount = $errorList.querySelectorAll('.active').length;
+    switch (newErrorCount) {
+      case 0:
+        $errorSummaryLink.classList.remove('active');
+        $errorList.classList.remove('active');
+        break;
+      case 1: 
+        $errorSummaryLink.innerHTML = ("There is "+newErrorCount+" error in the form you submitted.");
+        break;
+      default:
+        $errorSummaryLink.innerHTML = ("There are "+newErrorCount+" errors in the form you submitted.");
+    }
   }
 
   // UTILITY FUNCTIONS =================================================

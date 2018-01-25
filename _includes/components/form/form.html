@@ -1,6 +1,6 @@
 <form action="#" class="form js-form" name="contactInfo" id="contactInfo" novalidate>
-  <a class="sr form__error-link js-form__error-link" href="#"></a>
-  <div class="sr form__error-list js-form__error-list"></div>
+  <a class="form__error-link js-form__error-link" href="#"></a>
+  <ol class="form__error-list js-form__error-list"></ol>
 {% include components/text_input/textinput.html %}
 {% include components/radio_button/radiobutton.html %}
 {% include components/select/select.html %}
@@ -9,6 +9,7 @@
   <div class="form__item">
     <input class="input-submit" id="submit" type="submit"/>
   </div>
+<p><span class="form__required"></span> Required field</p>
 </form>
 
 <!-- <form class="form">

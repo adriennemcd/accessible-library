@@ -1,0 +1,18 @@
+<p class="sr">Component List</p>
+<a href="#main-content" class="sr">Skip to main content</a>
+<ul class="post-list">
+  {% assign sorted_posts = site.categories['block'] | sort: 'title' %}
+  {% for post in sorted_posts %}
+    <li>
+      <a class="post-link" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
+      {% assign post_children = site.categories['element'] | where: "parent", post.name | sort: 'title' %}
+      {% for post in post_children%}
+        {% if forloop.first %}<ul>{% endif %}
+        <li>
+          <a class="post-link" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
+        </li>
+      {% if forloop.last %}</ul>{% endif %}
+      {% endfor%}
+    </li>
+  {% endfor %}
+</ul>

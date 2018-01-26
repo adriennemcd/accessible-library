@@ -2,7 +2,8 @@
 layout: post
 title:  "Radio Buttons"
 date:   2017-12-04 09:29:03 -0500
-categories: component
+categories: [component, element]
+parent: form
 jsarr:
      - components/accordion/accordion.js
 ---

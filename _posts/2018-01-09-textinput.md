@@ -2,7 +2,8 @@
 layout: post
 title:  "Text Input"
 date:   2018-01-09 09:29:03 -0500
-categories: component
+categories: [component, element]
+parent: form
 jsarr:
      - components/accordion/accordion.js
 ---

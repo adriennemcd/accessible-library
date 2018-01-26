@@ -2,7 +2,7 @@
 layout: post
 title:  "Accordion"
 date:   2017-11-28 09:29:03 -0500
-categories: component
+categories: [component, block]
 jsarr:
      - components/accordion/accordion.js
 ---
